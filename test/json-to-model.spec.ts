@@ -1,5 +1,8 @@
-import { jsonToModel } from '../src/utils/json-to-model';
-
+import {
+  SchemaTypesMapDataTypes,
+  jsonToModel,
+} from '../src/utils/json-to-model';
+import { expect, it, describe } from 'vitest';
 describe('jsonToModel', () => {
   it('传入data对象返回模型对象', () => {
     const data = {
@@ -8,21 +11,19 @@ describe('jsonToModel', () => {
       telPhone: '18586856279',
     };
     const result = jsonToModel(data);
-    expect(result).toMatchInlineSnapshot(`
-      Object {
-        "age": Object {
-          "allowNull": true,
-          "type": [Function],
-        },
-        "name": Object {
-          "allowNull": true,
-          "type": [Function],
-        },
-        "telPhone": Object {
-          "allowNull": true,
-          "type": [Function],
-        },
-      }
-    `);
+    expect(result).toEqual({
+      name: {
+        type: SchemaTypesMapDataTypes.string,
+        allowNull: true,
+      },
+      age: {
+        type: SchemaTypesMapDataTypes.integer,
+        allowNull: true,
+      },
+      telPhone: {
+        type: SchemaTypesMapDataTypes.string,
+        allowNull: true,
+      },
+    });
   });
 });

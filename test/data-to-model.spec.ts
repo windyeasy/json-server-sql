@@ -1,5 +1,8 @@
+import { expect, it, describe } from 'vitest';
 import DataToModel from '../src/transform-model/data-to-model';
 import connect from '../src/app/database';
+
+import { SchemaTypesMapDataTypes } from '../src/utils';
 
 describe('dataToModel', () => {
   const sequelize = connect({
@@ -30,42 +33,20 @@ describe('dataToModel', () => {
       ],
     };
     const result = dataToModel.dataToModels(data);
-    expect(result).toMatchInlineSnapshot(`
-      Object {
-        "address": Object {
-          "city": Object {
-            "allowNull": true,
-            "type": [Function],
-          },
-          "district": Object {
-            "allowNull": true,
-            "type": [Function],
-          },
-          "province": Object {
-            "allowNull": true,
-            "type": [Function],
-          },
-          "street": Object {
-            "allowNull": true,
-            "type": [Function],
-          },
-        },
-        "user": Object {
-          "age": Object {
-            "allowNull": true,
-            "type": [Function],
-          },
-          "name": Object {
-            "allowNull": true,
-            "type": [Function],
-          },
-          "telPhone": Object {
-            "allowNull": true,
-            "type": [Function],
-          },
-        },
-      }
-    `);
+
+    expect(result).toEqual({
+      user: {
+        name: { type: SchemaTypesMapDataTypes.string, allowNull: true },
+        age: { type: SchemaTypesMapDataTypes.integer, allowNull: true },
+        telPhone: { type: SchemaTypesMapDataTypes.string, allowNull: true },
+      },
+      address: {
+        province: { type: SchemaTypesMapDataTypes.string, allowNull: true },
+        city: { type: SchemaTypesMapDataTypes.string, allowNull: true },
+        district: { type: SchemaTypesMapDataTypes.string, allowNull: true },
+        street: { type: SchemaTypesMapDataTypes.string, allowNull: true },
+      },
+    });
   });
 
   it('测试genterModelTable, 在数据库中生成表', async () => {
@@ -81,7 +62,7 @@ describe('dataToModel', () => {
     };
     const result = await dataToModel.genterModelTable(data);
     expect(result).toMatchInlineSnapshot(`
-      Array [
+      [
         [Function],
       ]
     `);
